@@ -1,0 +1,14 @@
+<mat-form-field>
+    <div class="form-row">
+        <input matInput placeholder="Pseudo" [formControl]="pseudoCtrl">
+        <div class="example-button-row">
+            @if (disabled$ | async ) {
+            <button matButton disabled>Ok</button>
+            } @else {
+            <button matButton (click)="savePseudo()">Ok</button>
+            }
+
+        </div>
+    </div>
+
+</mat-form-field>

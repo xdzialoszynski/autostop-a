@@ -1,0 +1,32 @@
+:host {
+    display: block; // Assure que le composant prend toute la largeur disponible.
+    width: 100%;
+    background-color: #ffffff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); // Une ombre subtile pour un effet de profondeur.
+    z-index: 1000; // Pour s'assurer qu'il est au-dessus des autres éléments comme la carte.
+}
+
+.status-bar-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px; // Une hauteur standard pour une barre de navigation.
+    padding: 0 24px; // Espacement sur les côtés.
+}
+
+.app-title {
+    h1 {
+        margin: 0;
+        font-size: 1.75rem;
+        font-weight: 500;
+        color: #2c3e50; // Une couleur de texte sobre et lisible.
+    }
+}
+
+.user-actions {
+    // Styles pour la zone des actions utilisateur.
+    // Par exemple, pour aligner des icônes ou des boutons.
+    display: flex;
+    align-items: center;
+    gap: 16px; // Espace entre les futurs éléments.
+}
