@@ -9,7 +9,7 @@
 .status-bar-content {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start;
     height: 64px; // Une hauteur standard pour une barre de navigation.
     padding: 0 24px; // Espacement sur les côtés.
 }
@@ -28,5 +28,12 @@
     // Par exemple, pour aligner des icônes ou des boutons.
     display: flex;
     align-items: center;
-    gap: 16px; // Espace entre les futurs éléments.
+
+    /* Ajoute un séparateur vertical entre les composants pour bien les délimiter */
+    &>*+* {
+        margin-left: 12px;
+        padding-left: 12px;
+        border-left: 1px solid rgba(0, 0, 0, 0.12);
+        /* Couleur de diviseur standard de Material */
+    }
 }
