@@ -1,0 +1,33 @@
+.avatar-display {
+  // Using 2rem for width and height, which corresponds to 32px if root font-size is 16px.
+  // This is a common size for small avatars, like Tailwind's w-8/h-8 classes.
+  // You can adjust this value.
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f0f0f0; // A light gray for the background of the fallback icon
+  cursor: pointer;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: #e0e0e0; // A slightly darker gray on hover
+  }
+}
+
+.avatar-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; // This ensures the image covers the circle without distortion
+}
+
+// You might want to style the mat-icon as well
+mat-icon {
+    // Adjust size if needed, e.g.
+    // font-size: 1.5rem;
+    // width: 1.5rem;
+    // height: 1.5rem;
+}

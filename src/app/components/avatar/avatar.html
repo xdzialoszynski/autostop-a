@@ -1,0 +1,11 @@
+<div class="avatar-container">
+    <div class="avatar-display" (click)="onClick()">
+        <!-- :) -->
+        @if (avatar$|async) {
+        <img src="{{ avatar$ | async }}" alt="avatar" class="avatar-image">
+        } @else {
+        <mat-icon>person</mat-icon>
+        }
+    </div>
+    <input type="file" accept="image/*" style="display: none;" #fileInput (change)="onFileSelected($event)" />
+</div>
