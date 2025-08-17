@@ -30,9 +30,6 @@ export class Pseudo implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.pseudo$.pipe(takeUntil(this.destroy$)).subscribe(pseudo => {
-      if (!pseudo) {
-        this.isEditing = true;
-      }
       this.pseudoCtrl.setValue(pseudo || '');
     });
   }
