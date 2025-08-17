@@ -1,5 +1,5 @@
-<div class="avatar-container">
-    <div class="avatar-display" (click)="onClick()">
+<div class="avatar-container" (click)="onClick()">
+    <div class="avatar-display">
         <!-- :) -->
         @if (avatar$|async) {
         <img src="{{ avatar$ | async }}" alt="avatar" class="avatar-image">

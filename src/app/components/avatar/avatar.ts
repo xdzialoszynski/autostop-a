@@ -4,6 +4,8 @@ import { CommonModule } from '@angular/common';
 import { Observable } from 'rxjs';
 import { MatIconModule } from '@angular/material/icon';
 
+type Base64URLString = string;
+
 @Component({
   selector: 'app-avatar',
   imports: [CommonModule, MatIconModule],
@@ -13,7 +15,6 @@ import { MatIconModule } from '@angular/material/icon';
 export class Avatar {
   @ViewChild('fileInput') fileInputRef!: ElementRef<HTMLInputElement>;
 
-  isEditing: any;
   avatar$!: Observable<Base64URLString | null>;
 
   constructor(private service: AppStateService) {
@@ -25,16 +26,17 @@ export class Avatar {
   }
 
   onFileSelected(event: Event) {
-    if (!event.target || !(event.target instanceof HTMLInputElement) || !event.target.files || event.target.files.length === 0) {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+
+    if (!file) {
       return;
     }
-    const file = event.target.files[0];
     const reader = new FileReader();
 
     reader.onloadend = () => {
       this.service.avatar = reader.result as Base64URLString;
     };
     reader.readAsDataURL(file);
-    console.log(file);
   }
 }
