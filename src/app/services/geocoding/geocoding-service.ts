@@ -14,6 +14,7 @@ export class GeocodingService {
     const params = new HttpParams()
       .set('city', query)
       .set('country', 'france')
+      .set('addressdetails', '1')
       .set('format', 'json');
 
     return this.httpClient.get(this.BASE_URL, { params });

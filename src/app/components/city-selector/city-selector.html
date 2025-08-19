@@ -1,0 +1,22 @@
+<div class="city-container">
+    @if (!isEditing) {
+    <div class="city-display" (click)="switchToEditMode()">
+        <!-- Utiliser display_name pour être cohérent avec les options et le champ de saisie -->
+        <span>{{ citySelected?.name + ', ' + citySelected?.address?.postcode || 'Choisir une ville' }}</span>
+    </div>
+    } @else {
+    <div class="city-edit">
+        <mat-form-field class="example-full-width" subscriptSizing="dynamic">
+            <mat-label>Ville</mat-label>
+            <input type="text" placeholder="Pick one" aria-label="Ville" matInput [formControl]="searchCtrl"
+                [matAutocomplete]="auto" (keyup.escape)="switchToDisplayMode()" />
+            <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onOptionSelected($event)"
+                (closed)="switchToDisplayMode()" [displayWith]="displayFn" panelWidth="500px">
+                @for (option of results; track option) {
+                <mat-option [value]="option">{{ option.display_name }}</mat-option>
+                }
+            </mat-autocomplete>
+        </mat-form-field>
+    </div>
+    }
+</div>

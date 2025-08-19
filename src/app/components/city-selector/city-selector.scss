@@ -1,0 +1,46 @@
+.cdk-overlay-pane {
+    min-width: 500px;
+}
+
+.city-container {
+    display: flex;
+    align-items: center;
+    /* Hauteur minimale pour correspondre au champ de saisie et éviter les sauts de layout */
+    min-height: 56px;
+}
+
+.city-display {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    padding: 8px 12px;
+    border-radius: 4px;
+    transition: background-color 0.2s ease-in-out;
+
+    span {
+        font-size: 1.2rem;
+        font-weight: 500;
+        color: #3f51b5; // Couleur primaire d'Angular Material
+    }
+
+    mat-icon {
+        margin-left: 8px;
+        font-size: 18px;
+        color: #757575;
+    }
+
+    &:hover {
+        background-color: rgba(0, 0, 0, 0.04);
+    }
+}
+
+.city-edit {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    .city-input {
+        // Fait en sorte que le champ de saisie ne prenne pas trop de place
+        width: 150px;
+    }
+}
