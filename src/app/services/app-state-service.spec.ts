@@ -49,6 +49,7 @@ describe('AppStateService', () => {
             localStorageMock.getItem.and.callFake((key: string) => {
                 if (key === 'autostop-pseudo') return "fake pseudo";
                 if (key === 'autostop-avatar') return "data:image/png;base64,test-avatar";
+                if (key === 'autostop-city') return null;
                 return null;
             });
 
@@ -63,30 +64,39 @@ describe('AppStateService', () => {
         it('should initialize with values from local storage', () => {
             expect(service.pseudo).toBe("fake pseudo");
             expect(service.avatar).toBe("data:image/png;base64,test-avatar");
+            expect(service.city).toBe(null);
             expect(localStorageMock.getItem).toHaveBeenCalledWith('autostop-pseudo');
             expect(localStorageMock.getItem).toHaveBeenCalledWith('autostop-avatar');
+            expect(localStorageMock.getItem).not.toHaveBeenCalledWith('autostop-city');
         });
 
         it('should remove values from localstorage', () => {
             service.pseudo = null;
             service.avatar = null;
+            service.city = null;
             expect(service.pseudo).toBe(null);
             expect(service.avatar).toBe(null);
+            expect(service.city).toBe(null);
             expect(localStorageMock.removeItem).toHaveBeenCalledWith('autostop-pseudo');
             expect(localStorageMock.removeItem).toHaveBeenCalledWith('autostop-avatar');
+            expect(localStorageMock.removeItem).not.toHaveBeenCalledWith('autostop-city');
         });
 
         it('should set values in localstorage', () => {
             const newPseudo = 'New Pseudo';
             const newAvatar = 'data:image/png;base64,new-avatar';
+            const newCity = 'New City';
 
             service.pseudo = newPseudo;
             service.avatar = newAvatar;
+            service.city = newCity;
 
             expect(service.pseudo).toBe(newPseudo);
             expect(service.avatar).toBe(newAvatar);
+            expect(service.city).toBe(newCity);
             expect(localStorageMock.setItem).toHaveBeenCalledWith('autostop-pseudo', newPseudo);
             expect(localStorageMock.setItem).toHaveBeenCalledWith('autostop-avatar', newAvatar);
+            expect(localStorageMock.setItem).not.toHaveBeenCalledWith('autostop-city', newCity);
         });
 
         it('should emit new pseudo on pseudo$ when state is updated', async () => {
@@ -118,5 +128,27 @@ describe('AppStateService', () => {
                 done();
             }, 0);
         });
-    });
+
+        it('should emit new city on city$ when state is updated', async () => {
+            const newCity = 'New City';
+            const cityPromise = firstValueFrom(service.city$.pipe(skip(1)));
+            service.city = newCity;
+            await expectAsync(cityPromise).toBeResolvedTo(newCity);
+        });
+
+        it('should not emit on city$ if the value is the same', (done) => {
+            const sameCity = null; // La même valeur que celle initialisée
+            let emissions = 0;
+            service.city$.pipe(skip(1)).subscribe(() => {
+                emissions++;
+            });
+
+            service.city = sameCity;
+
+            setTimeout(() => {
+                expect(emissions).toBe(0, 'should not emit when value is the same');
+                done();
+            }, 0);
+        });
+    })
 });
