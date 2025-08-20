@@ -2,19 +2,20 @@
     @if (!isEditing) {
     <div class="pseudo-display" (click)="switchToEditMode()">
         <span>{{ (pseudo$ | async) || 'Définir un pseudo' }}</span>
-        <mat-icon>edit</mat-icon>
     </div>
     } @else {
     <div class="pseudo-edit">
         <mat-form-field appearance="outline" class="pseudo-input" subscriptSizing="dynamic">
             <mat-label>Pseudo</mat-label>
-            <input matInput [formControl]="pseudoCtrl" (keyup.enter)="savePseudo()" (keyup.escape)="cancelEdit()">
+            <input matInput [formControl]="pseudoCtrl" (keyup.enter)="savePseudo()" (keyup.escape)="cancelEdit()"
+                (blur)="cancelEdit()">
         </mat-form-field>
         <div class="edit-actions">
-            <button mat-icon-button color="primary" [disabled]="pseudoCtrl.invalid" (click)="savePseudo()">
+            <button mat-icon-button color="primary" [disabled]="pseudoCtrl.invalid"
+                (mousedown)="$event.preventDefault()" (click)="savePseudo()">
                 <mat-icon>check</mat-icon>
             </button>
-            <button mat-icon-button color="warn" (click)="cancelEdit()">
+            <button mat-icon-button color="warn" (mousedown)="$event.preventDefault()" (click)="cancelEdit()">
                 <mat-icon>close</mat-icon>
             </button>
         </div>

@@ -1,11 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
+import { MatInput, MatInputModule } from '@angular/material/input';
 import { Observable, Subject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { AppStateService } from '../../services/app-state-service';
@@ -18,6 +18,8 @@ import { AppStateService } from '../../services/app-state-service';
   imports: [MatFormFieldModule, MatInputModule, MatButtonModule, CommonModule, ReactiveFormsModule, MatIconModule]
 })
 export class Pseudo implements OnInit, OnDestroy {
+  @ViewChild(MatInput) pseudoInput!: MatInput;
+
   pseudoCtrl = new FormControl('Pseudo', [Validators.required, Validators.minLength(3)]);
   isEditing = false;
   pseudo$: Observable<string | null>;
@@ -36,6 +38,10 @@ export class Pseudo implements OnInit, OnDestroy {
 
   switchToEditMode(): void {
     this.isEditing = true;
+
+    setTimeout(() => {
+      this.pseudoInput.focus();
+    });
   }
 
   savePseudo(): void {
