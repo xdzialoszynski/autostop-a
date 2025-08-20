@@ -18,7 +18,17 @@ import { AppStateService } from '../../services/app-state-service';
   imports: [MatFormFieldModule, MatInputModule, MatButtonModule, CommonModule, ReactiveFormsModule, MatIconModule]
 })
 export class Pseudo implements OnInit, OnDestroy {
-  @ViewChild(MatInput) pseudoInput!: MatInput;
+  // Utiliser un setter pour le ViewChild est plus robuste que setTimeout.
+  // Il sera appelé dès que l'élément apparaît dans la vue.
+  @ViewChild(MatInput)
+  set pseudoInput(input: MatInput) {
+    if (input) {
+      // Le focus est différé avec setTimeout pour éviter une erreur `ExpressionChangedAfterItHasBeenCheckedError`.
+      // Cela donne à Angular le temps de terminer son cycle de détection des changements
+      // avant que l'événement de focus ne modifie l'état du MatFormField.
+      setTimeout(() => input.focus());
+    }
+  }
 
   pseudoCtrl = new FormControl('Pseudo', [Validators.required, Validators.minLength(3)]);
   isEditing = false;
@@ -38,10 +48,7 @@ export class Pseudo implements OnInit, OnDestroy {
 
   switchToEditMode(): void {
     this.isEditing = true;
-
-    setTimeout(() => {
-      this.pseudoInput.focus();
-    });
+    // Le focus est maintenant géré automatiquement par le setter du ViewChild.
   }
 
   savePseudo(): void {
@@ -58,8 +65,13 @@ export class Pseudo implements OnInit, OnDestroy {
 
   cancelEdit(): void {
     this.isEditing = false;
-    // Réinitialiser la valeur du contrôle à celle du state
-    this.pseudo$.pipe(take(1)).subscribe(pseudo => this.pseudoCtrl.setValue(pseudo));
+    // Réinitialiser la valeur du contrôle à celle du state.
+    // Le setTimeout évite une erreur ExpressionChangedAfterItHasBeenCheckedError
+    // en s'assurant que la valeur du formulaire est mise à jour après le cycle de
+    // détection des changements qui supprime le champ de saisie.
+    setTimeout(() => {
+      this.pseudo$.pipe(take(1)).subscribe(pseudo => this.pseudoCtrl.setValue(pseudo || ''));
+    });
   }
 
   ngOnDestroy(): void {

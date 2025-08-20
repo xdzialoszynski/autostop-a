@@ -1,10 +1,10 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideNoopAnimations } from '@angular/platform-browser/animations';
+import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { provideNoopAnimations } from '@angular/platform-browser/animations';
+import { BehaviorSubject } from 'rxjs';
 
-import { Pseudo } from './pseudo';
 import { AppStateService } from '../../services/app-state-service';
+import { Pseudo } from './pseudo';
 
 describe('Pseudo', () => {
   let component: Pseudo;
@@ -67,22 +67,23 @@ describe('Pseudo', () => {
       expect(displayElement.textContent).toContain(testPseudo);
     });
 
-    it('should switch to edit mode on click', () => {
+    it('should switch to edit mode on click', fakeAsync(() => {
       const displayElement = fixture.debugElement.query(By.css('.pseudo-display'));
       displayElement.triggerEventHandler('click', null);
       fixture.detectChanges();
-
+      tick();
       expect(component.isEditing).toBe(true);
       const editContainer = fixture.nativeElement.querySelector('.pseudo-edit');
       expect(editContainer).toBeTruthy();
-    });
+    }));
   });
 
   describe('Edit mode', () => {
-    beforeEach(() => {
+    beforeEach(fakeAsync(() => {
       component.switchToEditMode();
       fixture.detectChanges();
-    });
+      tick(); // Exécute le setTimeout pour le focus
+    }));
 
     it('should have save button disabled when input is invalid', () => {
       component.pseudoCtrl.setValue(''); // Invalide car `required`
@@ -110,22 +111,24 @@ describe('Pseudo', () => {
       expect(component.isEditing).toBe(false);
     });
 
-    it('should switch back to display mode and reset value without saving on cancel click', () => {
+    it('should switch back to display mode and reset value without saving on cancel click', fakeAsync(() => {
       const initialPseudo = 'InitialPseudo';
       pseudoSubject.next(initialPseudo);
+      fixture.detectChanges();
       component.pseudoCtrl.setValue('Something new');
       fixture.detectChanges();
 
       const cancelButton = fixture.debugElement.query(By.css('button[color="warn"]'));
       cancelButton.triggerEventHandler('click', null);
-      fixture.detectChanges();
+      fixture.detectChanges(); // Appliquer le changement de isEditing (la vue est mise à jour)
+      tick();                  // Exécuter le code asynchrone (setTimeout) dans cancelEdit
 
       expect(pseudoSetterSpy).not.toHaveBeenCalled();
       expect(component.isEditing).toBe(false);
       expect(component.pseudoCtrl.value).toBe(initialPseudo);
-    });
+    }));
 
-    it('should switch back to display mode and reset value on Escape key', () => {
+    it('should switch back to display mode and reset value on Escape key', fakeAsync(() => {
       const initialPseudo = 'InitialPseudo';
       pseudoSubject.next(initialPseudo);
       component.pseudoCtrl.setValue('Something new');
@@ -134,10 +137,11 @@ describe('Pseudo', () => {
       const inputElement = fixture.debugElement.query(By.css('input'));
       inputElement.triggerEventHandler('keyup.escape', {});
       fixture.detectChanges();
+      tick();
 
       expect(pseudoSetterSpy).not.toHaveBeenCalled();
       expect(component.isEditing).toBe(false);
       expect(component.pseudoCtrl.value).toBe(initialPseudo);
-    });
+    }));
   });
 });
