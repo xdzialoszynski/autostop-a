@@ -2,7 +2,8 @@
     @if (!isEditing) {
     <div class="city-display" (click)="switchToEditMode()">
         <!-- Utiliser display_name pour être cohérent avec les options et le champ de saisie -->
-        <span>{{ citySelected?.name + ', ' + citySelected?.address?.postcode || 'Choisir une ville' }}</span>
+        <span>{{ (citySelected)?(citySelected?.name + ', ' + citySelected?.address?.postcode) : 'Choisir une ville'
+            }}</span>
     </div>
     } @else {
     <div class="city-edit">
