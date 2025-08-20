@@ -1,14 +1,23 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { StatusBarComponent } from './status-bar';
+import { GeocodingService } from '../../services/geocoding/geocoding-service';
+import { of } from 'rxjs';
 
 describe('StatusBarComponent', () => {
   let component: StatusBarComponent;
   let fixture: ComponentFixture<StatusBarComponent>;
 
   beforeEach(async () => {
+    const geocodingServiceMock = {
+      getAutocompletion: () => of([])
+    };
+
     await TestBed.configureTestingModule({
-      imports: [StatusBarComponent]
+      imports: [StatusBarComponent],
+      providers: [
+        { provide: GeocodingService, useValue: geocodingServiceMock }
+      ]
     })
       .compileComponents();
 
