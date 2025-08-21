@@ -1,18 +1,20 @@
+import { AsyncPipe, CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { GeocodingService } from '../../services/geocoding/geocoding-service';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
-import { Subject } from 'rxjs';
-import { debounceTime, distinctUntilChanged, filter, switchMap, takeUntil, tap } from 'rxjs/operators';
+import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatAutocompleteModule, MatAutocompleteSelectedEvent, MatAutocompleteTrigger } from '@angular/material/autocomplete';
-import { MatInput, MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
+import { MatInput, MatInputModule } from '@angular/material/input';
+import { Observable, Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, filter, map, switchMap, takeUntil, tap } from 'rxjs/operators';
+import { AppStateService } from '../../services/app-state-service';
+import { GeocodingResult } from '../../shared/interfaces/geocoding.interface';
+import { GeocodingService } from '../../services/geocoding/geocoding-service';
 
 @Component({
   selector: 'app-city-selector',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, MatFormFieldModule, MatAutocompleteModule, MatInputModule, MatIconModule],
+  imports: [ReactiveFormsModule, CommonModule, MatFormFieldModule, MatAutocompleteModule, MatInputModule, MatIconModule, AsyncPipe],
   templateUrl: './city-selector.html',
   styleUrl: './city-selector.scss'
 })
@@ -21,22 +23,28 @@ export class CitySelector implements OnInit, OnDestroy {
 
   // Le FormControl peut contenir une chaîne (pendant la saisie) ou un objet (après sélection).
   isEditing = false;
-  searchCtrl = new FormControl<string | any>('');
+  searchCtrl = new FormControl<string | GeocodingResult>('');
   results: any[] = [];
   isLoading = false;
 
-  citySelected: any;
+  cityDisplayName$!: Observable<string>;
 
-  // Pour communiquer la ville sélectionnée au composant parent.
-  // @Output() citySelected = new EventEmitter<any>();
-
-
-  // Subject pour gérer la désinscription et éviter les fuites mémoire.
   private destroy$ = new Subject<void>();
 
-  constructor(private geocodingService: GeocodingService) { }
+  constructor(private geocodingService: GeocodingService, private state: AppStateService) { }
 
   ngOnInit(): void {
+    this.cityDisplayName$ = this.state.city$.pipe(
+      map(city => {
+        // Si une ville est sélectionnée (et a les bonnes propriétés), on formate son nom.
+        if (city && city.name && city.address?.postcode) {
+          return `${city.name}, ${city.address.postcode}`;
+        }
+        // Sinon, on affiche le texte par défaut.
+        return 'Choisir une ville';
+      })
+    );
+
     this.searchCtrl.valueChanges.pipe(
       // 3. Attendre 300ms après la dernière frappe avant de lancer la recherche.
       debounceTime(300),
@@ -71,9 +79,7 @@ export class CitySelector implements OnInit, OnDestroy {
   onOptionSelected(event: MatAutocompleteSelectedEvent): void {
     const selectedCity = event.option.value;
     console.log('Ville sélectionnée:', selectedCity);
-    this.citySelected = selectedCity;
-    // Vous pouvez maintenant utiliser `selectedCity` pour faire ce que vous voulez,
-    // comme l'envoyer à un service ou l'émettre vers un composant parent.
+    this.state.city = selectedCity;
   }
 
 
@@ -91,14 +97,14 @@ export class CitySelector implements OnInit, OnDestroy {
     this.isEditing = false;
     // Si une ville a été sélectionnée, on met à jour le champ avec l'objet ville.
     // Sinon, on le vide pour ne pas laisser un texte de recherche partiel.
-    this.searchCtrl.setValue(this.citySelected || '');
+    this.searchCtrl.setValue(this.state.city || '');
   }
 
 
 
   // Cette fonction est utilisée par l'autocomplete pour savoir quoi afficher dans l'input
   // une fois qu'un objet a été sélectionné.
-  displayFn(city: any): string {
+  displayFn(city: GeocodingResult): string {
     // Utiliser display_name pour être cohérent avec ce qui est affiché dans les options
     return city && city.display_name ? city.display_name : '';
   }

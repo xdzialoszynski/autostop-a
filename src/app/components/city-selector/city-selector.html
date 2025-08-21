@@ -2,8 +2,8 @@
     @if (!isEditing) {
     <div class="city-display" (click)="switchToEditMode()">
         <!-- Utiliser display_name pour être cohérent avec les options et le champ de saisie -->
-        <span>{{ (citySelected)?(citySelected?.name + ', ' + citySelected?.address?.postcode) : 'Choisir une ville'
-            }}</span>
+        <!-- La valeur est maintenant gérée par un observable avec le pipe async, ce qui est plus propre et réactif. -->
+        <span>{{ cityDisplayName$ | async }}</span>
     </div>
     } @else {
     <div class="city-edit">

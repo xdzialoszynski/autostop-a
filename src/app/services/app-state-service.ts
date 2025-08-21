@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { GlobalAppState } from '../shared/interfaces/global-app-state';
+import { GeocodingResult } from '../shared/interfaces/geocoding.interface';
 import { BehaviorSubject, distinctUntilChanged, map, Observable } from 'rxjs';
 
 @Injectable({
@@ -15,7 +16,7 @@ export class AppStateService {
 
     readonly pseudo$: Observable<string | null>;
     readonly avatar$: Observable<Base64URLString | null>;
-    readonly city$: Observable<string | null>;
+    readonly city$: Observable<GeocodingResult | null>;
 
 
     constructor() {
@@ -63,6 +64,6 @@ export class AppStateService {
     set avatar(avatar: Base64URLString | null) { this.updateState({ avatar }); }
     get avatar(): Base64URLString | null { return this._state.getValue().avatar; }
 
-    set city(city: string | null) { this.updateState({ city }); }
-    get city(): string | null { return this._state.getValue().city; }
+    set city(city: GeocodingResult | null) { this.updateState({ city }); }
+    get city(): GeocodingResult | null { return this._state.getValue().city; }
 }
