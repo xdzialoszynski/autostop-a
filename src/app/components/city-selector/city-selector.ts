@@ -1,7 +1,7 @@
 import { AsyncPipe, CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { MatAutocomplete, MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInput, MatInputModule } from '@angular/material/input';
@@ -20,6 +20,7 @@ import { GeocodingService } from '../../services/geocoding/geocoding-service';
 })
 export class CitySelector implements OnInit, OnDestroy {
   @ViewChild(MatInput) searchInput!: MatInput;
+  @ViewChild(MatAutocomplete) autocomplete!: MatAutocomplete;
 
   // Le FormControl peut contenir une chaîne (pendant la saisie) ou un objet (après sélection).
   isEditing = false;
@@ -80,8 +81,21 @@ export class CitySelector implements OnInit, OnDestroy {
     const selectedCity = event.option.value;
     console.log('Ville sélectionnée:', selectedCity);
     this.state.city = selectedCity;
-  }
 
+  }
+  onInputBlur(): void {
+    // Nous utilisons un setTimeout pour gérer le cas où l'utilisateur clique sur une option.
+    // L'événement blur se déclenche avant l'événement de sélection de l'option.
+    // Ce délai permet de s'assurer que si une option est sélectionnée, le panneau
+    // est déjà considéré comme "fermé" lorsque ce code s'exécute.
+    setTimeout(() => {
+      // Si le panneau d'autocomplétion n'est plus ouvert, cela signifie que l'utilisateur
+      // a cliqué ailleurs ou a appuyé sur Echap. On repasse en mode affichage.
+      if (!this.autocomplete.isOpen) {
+        this.switchToDisplayMode();
+      }
+    }, 200); // Un délai de 200ms est généralement suffisant.
+  }
 
   switchToEditMode(): void {
     this.isEditing = true;
