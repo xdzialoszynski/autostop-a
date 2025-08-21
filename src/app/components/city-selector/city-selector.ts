@@ -24,7 +24,7 @@ export class CitySelector implements OnInit, OnDestroy {
   // Le FormControl peut contenir une chaîne (pendant la saisie) ou un objet (après sélection).
   isEditing = false;
   searchCtrl = new FormControl<string | GeocodingResult>('');
-  results: any[] = [];
+  results: GeocodingResult[] = [];
   isLoading = false;
 
   cityDisplayName$!: Observable<string>;
