@@ -71,7 +71,10 @@
               "buildTarget": "autostop-angular:build:production"
             },
             "development": {
-              "buildTarget": "autostop-angular:build:development"
+              "buildTarget": "autostop-angular:build:development",
+              "allowedHosts": [
+                ".loca.lt"
+              ]
             }
           },
           "defaultConfiguration": "development"
