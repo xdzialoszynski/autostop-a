@@ -5,7 +5,7 @@ import { MatAutocomplete, MatAutocompleteModule, MatAutocompleteSelectedEvent } 
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInput, MatInputModule } from '@angular/material/input';
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, of } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map, switchMap, takeUntil, tap } from 'rxjs/operators';
 import { AppStateService } from '../../services/app-state-service';
 import { GeocodingResult } from '../../shared/interfaces/geocoding.interface';
@@ -62,14 +62,14 @@ export class CitySelector implements OnInit, OnDestroy {
         if (value && value.length > 2) {
           return this.geocodingService.getAutocompletion(value);
         }
-        return []; // Retourner un observable vide si la recherche est trop courte.
+        return of([]); // Retourner un observable vide si la recherche est trop courte.
       }),
       tap(() => this.isLoading = false),
       // 6. Se désinscrire automatiquement à la destruction du composant.
       takeUntil(this.destroy$)
     ).subscribe((results) => {
       this.results = results;
-      console.log(results);
+      console.log("résultat de la requete http:" + results);
     });
   }
 
@@ -85,26 +85,29 @@ export class CitySelector implements OnInit, OnDestroy {
     this.state.city = selectedCity;
 
   }
-  onInputBlur(): void {
+  onClose(): void {
     // Nous utilisons un setTimeout pour gérer le cas où l'utilisateur clique sur une option.
     // L'événement blur se déclenche avant l'événement de sélection de l'option.
     // Ce délai permet de s'assurer que si une option est sélectionnée, le panneau
     // est déjà considéré comme "fermé" lorsque ce code s'exécute.
-    setTimeout(() => {
-      // Si le panneau d'autocomplétion n'est plus ouvert, cela signifie que l'utilisateur
-      // a cliqué ailleurs ou a appuyé sur Echap. On repasse en mode affichage.
-      if (!this.autocomplete.isOpen) {
+    if (this.autocomplete.isOpen) {
+      setTimeout(() => {
+        console.log('temporisation avant passage en mode affichage');
         this.switchToDisplayMode();
-      }
-    }, 200); // Un délai de 200ms est généralement suffisant.
+      }, 200);
+
+    } else {
+      this.switchToDisplayMode();
+    }
   }
 
   switchToEditMode(): void {
     this.isEditing = true;
     // Vider le champ pour que l'utilisateur puisse commencer une nouvelle recherche
-    this.searchCtrl.setValue('');
+    // this.searchInput?.focus();
     // Attendre que la vue soit mise à jour pour que l'input soit visible, puis lui donner le focus.
     setTimeout(() => {
+      // this.searchCtrl.setValue('');
       this.searchInput?.focus();
     });
   }
