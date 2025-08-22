@@ -40,6 +40,8 @@ export class CitySelector implements OnInit, OnDestroy {
         // Si une ville est sélectionnée (et a les bonnes propriétés), on formate son nom.
         if (city && city.name && city.address?.postcode) {
           return `${city.name}, ${city.address.postcode}`;
+        } else if (city && city.name) {
+          return city.name
         }
         // Sinon, on affiche le texte par défaut.
         return 'Choisir une ville';

@@ -24,7 +24,7 @@ export class GeocodingService {
         return results.map((result: NominatimResult) => {
           return {
             address: {
-              postcode: result.address.postcode
+              postcode: result.address?.postcode
             },
             display_name: result.display_name,
             name: result.name
