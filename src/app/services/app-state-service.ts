@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { GlobalAppState } from '../shared/interfaces/global-app-state';
-import { GeocodingResult } from '../shared/interfaces/geocoding.interface';
+import { GeocodingResult, Position } from '../shared/interfaces/geocoding.interface';
 import { BehaviorSubject, distinctUntilChanged, map, Observable } from 'rxjs';
 
 @Injectable({
@@ -10,20 +10,24 @@ export class AppStateService {
     private readonly STORAGE_KEYS: { [K in keyof GlobalAppState]: string } = {
         pseudo: 'autostop-pseudo',
         avatar: 'autostop-avatar',
-        city: 'autostop-city'
+        city: 'autostop-city',
+        position: 'autostop-position'
     };
     private readonly _state: BehaviorSubject<GlobalAppState>;
 
     readonly pseudo$: Observable<string | null>;
     readonly avatar$: Observable<Base64URLString | null>;
     readonly city$: Observable<GeocodingResult | null>;
+    readonly position$: Observable<Position | null>;
+
 
 
     constructor() {
         const initialState: GlobalAppState = {
             pseudo: localStorage.getItem(this.STORAGE_KEYS.pseudo),
             avatar: localStorage.getItem(this.STORAGE_KEYS.avatar),
-            city: null
+            city: null,
+            position: null
         };
         this._state = new BehaviorSubject<GlobalAppState>(initialState);
         this.pseudo$ = this._state.asObservable().pipe(
@@ -36,6 +40,10 @@ export class AppStateService {
         );
         this.city$ = this._state.asObservable().pipe(
             map(state => state.city),
+            distinctUntilChanged()
+        );
+        this.position$ = this._state.asObservable().pipe(
+            map(state => state.position),
             distinctUntilChanged()
         );
     }
@@ -66,4 +74,7 @@ export class AppStateService {
 
     set city(city: GeocodingResult | null) { this.updateState({ city }); }
     get city(): GeocodingResult | null { return this._state.getValue().city; }
+
+    set position(position: Position | null) { this.updateState({ position }); }
+    get position(): Position | null { return this._state.getValue().position; }
 }

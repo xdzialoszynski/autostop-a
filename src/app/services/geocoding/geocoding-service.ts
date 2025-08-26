@@ -27,7 +27,11 @@ export class GeocodingService {
               postcode: result.address?.postcode
             },
             display_name: result.display_name,
-            name: result.name
+            name: result.name,
+            position: {
+              lat: parseFloat(result.lat),
+              lng: parseFloat(result.lon)
+            }
           } as GeocodingResult
         }
         )
