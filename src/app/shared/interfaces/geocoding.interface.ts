@@ -6,7 +6,7 @@ export interface GeocodingResult {
     name: string;
     display_name: string;
     address: {
-        postcode: string;
+        postcode?: string;
     };
     position: Position;
 }

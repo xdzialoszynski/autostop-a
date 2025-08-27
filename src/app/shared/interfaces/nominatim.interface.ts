@@ -12,7 +12,7 @@ export interface NominatimResult {
     addresstype: string;
     name: string;
     display_name: string;
-    address: Address;
+    address?: Address;
     boundingbox: string[];
 }
 
@@ -25,7 +25,7 @@ export interface Address {
     state: string;
     "ISO3166-2-lvl4": string;
     region: string;
-    postcode: string;
+    postcode?: string;
     country: string;
     country_code: string;
 }

@@ -21,8 +21,8 @@ export class GeocodingService {
 
     return this.httpClient.get<NominatimResult[]>(this.BASE_URL, { params }).pipe(
       map(results => {
-        return results.map((result: NominatimResult) => {
-          return {
+        return results.map((result: NominatimResult): GeocodingResult => (
+          {
             address: {
               postcode: result.address?.postcode
             },
@@ -32,8 +32,7 @@ export class GeocodingService {
               lat: parseFloat(result.lat),
               lng: parseFloat(result.lon)
             }
-          } as GeocodingResult
-        }
+          })
         )
       })
     );
