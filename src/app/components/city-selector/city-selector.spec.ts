@@ -1,15 +1,14 @@
-import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
-import { provideHttpClient } from '@angular/common/http';
-import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
-import { provideNoopAnimations } from '@angular/platform-browser/animations';
-import { By } from '@angular/platform-browser';
 import { HarnessLoader } from '@angular/cdk/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
+import { provideHttpClient } from '@angular/common/http';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
+import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { MatAutocompleteHarness } from '@angular/material/autocomplete/testing';
-import { MatOptionHarness } from '@angular/material/core/testing';
+import { By } from '@angular/platform-browser';
+import { provideNoopAnimations } from '@angular/platform-browser/animations';
 
-import { CitySelector } from './city-selector';
 import { GeocodingResult } from '../../shared/interfaces/geocoding.interface';
+import { CitySelector } from './city-selector';
 
 describe('CitySelector', () => {
   let component: CitySelector;
@@ -86,8 +85,8 @@ describe('CitySelector', () => {
 
     // 3. Simuler la réponse de l'API
     const mockResults: GeocodingResult[] = [
-      { name: 'Marseille', display_name: 'Marseille, Bouches-du-Rhône, France', address: { postcode: '13000' } },
-      { name: 'Marseillan', display_name: 'Marseillan, Hérault, France', address: { postcode: '34340' } }
+      { name: 'Marseille', display_name: 'Marseille, Bouches-du-Rhône, France', address: { postcode: '13000' }, position: { lat: 0, lng: 0 } },
+      { name: 'Marseillan', display_name: 'Marseillan, Hérault, France', address: { postcode: '34340' }, position: { lat: 0, lng: 0 } }
     ];
     const req = httpTestingController.expectOne(request => request.url.includes('nominatim.openstreetmap.org/search'));
     expect(req.request.method).toBe('GET');

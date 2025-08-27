@@ -1,0 +1,16 @@
+<div class="boussole-container">
+    <svg [attr.width]="svgSize" [attr.height]="svgSize" [attr.viewBox]="'0 0 ' + svgSize + ' ' + svgSize">
+        <circle [attr.cx]="center" [attr.cy]="center" [attr.r]="center - 2" fill="white" stroke="black"
+            strokeWidth="1" />
+
+        <text [attr.x]="center" [attr.y]="center - (needleLength * 0.85)" font-size="6" text-anchor="middle"
+            fill="black">N</text>
+
+        <g [attr.transform]="'rotate(' + bearing + ' ' + center + ' ' + center + ')'">
+            <polygon
+                [attr.points]="center+','+(center - needleLength)+' '+ (center - 3)+','+center+' '+ (center + 3)+','+center"
+                fill="red" />
+        </g>
+        <circle [attr.cx]="center" [attr.cy]="center" r="2" fill="black" />
+    </svg>
+</div>

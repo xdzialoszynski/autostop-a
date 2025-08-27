@@ -85,7 +85,7 @@ describe('AppStateService', () => {
         it('should set values in localstorage', () => {
             const newPseudo = 'New Pseudo';
             const newAvatar = 'data:image/png;base64,new-avatar';
-            const newCity = { name: 'New City', address: { postcode: '12345' }, display_name: 'New City, 12345' };
+            const newCity = { name: 'New City', address: { postcode: '12345' }, display_name: 'New City, 12345', position: { lat: 0, lng: 0 } };
 
             service.pseudo = newPseudo;
             service.avatar = newAvatar;
@@ -130,7 +130,7 @@ describe('AppStateService', () => {
         });
 
         it('should emit new city on city$ when state is updated', async () => {
-            const newCity = { name: 'New City', address: { postcode: '12345' }, display_name: 'New City, 12345' };
+            const newCity = { name: 'New City', address: { postcode: '12345' }, display_name: 'New City, 12345', position: { lat: 0, lng: 0 } };
             const cityPromise = firstValueFrom(service.city$.pipe(skip(1)));
             service.city = newCity;
             await expectAsync(cityPromise).toBeResolvedTo(newCity);

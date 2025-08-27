@@ -21,7 +21,7 @@ class MockAppStateService {
 describe('GpsCoordinates', () => {
   let component: GpsCoordinates;
   let fixture: ComponentFixture<GpsCoordinates>;
-  let appStateService: MockAppStateService;
+  let appStateService: AppStateService;
   let watchPositionSpy: jasmine.Spy;
   let clearWatchSpy: jasmine.Spy;
   let successCallback: (pos: GeolocationPosition) => void;
@@ -37,7 +37,7 @@ describe('GpsCoordinates', () => {
 
     fixture = TestBed.createComponent(GpsCoordinates);
     component = fixture.componentInstance;
-    appStateService = TestBed.inject(AppStateService) as MockAppStateService;
+    appStateService = TestBed.inject(AppStateService);
 
     // Mock geolocation
     watchPositionSpy = spyOn(navigator.geolocation, 'watchPosition').and.callFake((success) => {
@@ -81,15 +81,16 @@ describe('GpsCoordinates', () => {
     const mockPosition1: GeolocationPosition = {
       coords: { latitude: 48.85, longitude: 2.35, accuracy: 1, altitude: null, altitudeAccuracy: null, heading: null, speed: null },
       timestamp: Date.now(),
-    };
+    } as GeolocationPosition;
+    ;
     const mockPosition2: GeolocationPosition = {
       coords: { latitude: 48.86, longitude: 2.36, accuracy: 1, altitude: null, altitudeAccuracy: null, heading: null, speed: null },
       timestamp: Date.now(),
-    };
+    } as GeolocationPosition;;
     const mockPosition3: GeolocationPosition = {
       coords: { latitude: 48.87, longitude: 2.37, accuracy: 1, altitude: null, altitudeAccuracy: null, heading: null, speed: null },
       timestamp: Date.now(),
-    };
+    } as GeolocationPosition;;
 
     it('should call navigator.geolocation.watchPosition on init', () => {
       fixture.detectChanges(); // ngOnInit calls initUserLocation
