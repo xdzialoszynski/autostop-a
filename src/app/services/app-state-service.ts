@@ -1,7 +1,11 @@
 import { Injectable } from '@angular/core';
 import { GlobalAppState } from '../shared/interfaces/global-app-state';
 import { GeocodingResult, Position } from '../shared/interfaces/geocoding.interface';
-import { BehaviorSubject, distinctUntilChanged, map, Observable } from 'rxjs';
+import { BehaviorSubject, combineLatest, distinctUntilChanged, map, Observable } from 'rxjs';
+import { IndicatorState } from '../services/app-state.enum';
+
+
+type Base64URLString = string;
 
 @Injectable({
     providedIn: 'root'
@@ -19,7 +23,7 @@ export class AppStateService {
     readonly avatar$: Observable<Base64URLString | null>;
     readonly city$: Observable<GeocodingResult | null>;
     readonly position$: Observable<Position | null>;
-
+    readonly indicator$: Observable<IndicatorState>;
 
 
     constructor() {
@@ -45,6 +49,17 @@ export class AppStateService {
         this.position$ = this._state.asObservable().pipe(
             map(state => state.position),
             distinctUntilChanged()
+        );
+        this.indicator$ = combineLatest(
+            [this.pseudo$, this.avatar$, this.city$, this.position$]
+        ).pipe(
+            map(([pseudo, avatar, city, position]) => {
+                if (pseudo && avatar && city && position) {
+                    return IndicatorState.READY_FOR_REQUEST;
+                } else {
+                    return IndicatorState.WAITING_FOR_USER_DATA;
+                }
+            })
         );
     }
 

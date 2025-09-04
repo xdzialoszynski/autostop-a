@@ -1,0 +1,9 @@
+.color-indicator {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    /* Permet d'arrondir le carré en cercle */
+    display: inline-block;
+    /* Permet à l'élément de s'afficher sur une seule ligne si nécessaire */
+    vertical-align: middle;
+}

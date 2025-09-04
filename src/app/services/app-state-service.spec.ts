@@ -1,7 +1,8 @@
 import { TestBed } from '@angular/core/testing';
 
+import { firstValueFrom, skip, tap } from 'rxjs';
 import { AppStateService } from './app-state-service';
-import { firstValueFrom, skip } from 'rxjs';
+import { IndicatorState } from './app-state.enum';
 
 describe('AppStateService', () => {
     let originalLocalStorage: Storage;
@@ -46,6 +47,7 @@ describe('AppStateService', () => {
         let service: AppStateService;
 
         beforeEach(() => {
+            // jasmine.clock().install();
             localStorageMock.getItem.and.callFake((key: string) => {
                 if (key === 'autostop-pseudo') return "fake pseudo";
                 if (key === 'autostop-avatar') return "data:image/png;base64,test-avatar";
@@ -56,6 +58,11 @@ describe('AppStateService', () => {
             TestBed.configureTestingModule({});
             service = TestBed.inject(AppStateService);
         });
+
+        afterEach(() => {
+            // jasmine.clock().uninstall();
+        });
+
 
         it('should be created', () => {
             expect(service).toBeTruthy();
@@ -149,6 +156,61 @@ describe('AppStateService', () => {
                 expect(emissions).toBe(0, 'should not emit when value is the same');
                 done();
             }, 0);
+        });
+
+        it('should emit READY_FOR_REQUEST on indicators$ when all data are provided', async () => {
+            const firstValueIndicator = await firstValueFrom(service.indicator$);
+            // on update 2 fois le state, la valeur finale à lire pour l'indicateur est donc la troisième
+            const secondValueIndicator = firstValueFrom(service.indicator$.pipe(skip(2)));
+
+            //on log
+            service.avatar$.subscribe(x => console.log(`avatar: ${x}`));
+            service.city$.subscribe(x => console.log(`city: ${x}`));
+            service.pseudo$.subscribe(x => console.log(`pseudo: ${x}`));
+            service.position$.pipe(
+                tap(x => console.log('position: ', x))
+            ).
+                subscribe();
+            service.indicator$.subscribe(x => console.log(`indicator: ${x}`));
+
+            expect(firstValueIndicator).toBe(IndicatorState.WAITING_FOR_USER_DATA);
+            service.city = { name: 'New City', address: { postcode: '12345' }, display_name: 'New City, 12345', position: { lat: 0, lng: 0 } };
+            service.position = { lat: 0, lng: 0 };
+
+            const secondValIndicateur = await secondValueIndicator;
+            console.log("seconde valeur:", secondValIndicateur);
+            await expectAsync(secondValueIndicator).toBeResolvedTo(IndicatorState.READY_FOR_REQUEST);
+            // expectAsync(secondValueIndicator).toBeResolved();
+            // expect(secondValIndicateur).toBe(IndicatorState.READY_FOR_REQUEST);
+        });
+
+        it('should emit WAITING_FOR_USER_DATA on indicators$ when missing data', async () => {
+            const firstValueIndicator = await firstValueFrom(service.indicator$);
+
+            // on update une fois le state, la valeur finale à lire pour l'indicateur est donc la deuxième
+            const secondValueIndicator = firstValueFrom(service.indicator$.pipe(skip(1)));
+
+            expect(firstValueIndicator).toBe(IndicatorState.WAITING_FOR_USER_DATA);
+            service.city = { name: 'New City', address: { postcode: '12345' }, display_name: 'New City, 12345', position: { lat: 0, lng: 0 } };
+            // il manque la position exprès
+
+            // service.position = { lat: 0, lng: 0 };
+
+            // Autres manière de formuler l'expectation (3 façons)
+
+            // 1: attendre la résolution et faire l'expect sur le résultat
+            // const secondValIndicateur = await secondValueIndicator;
+            // console.log("seconde valeur:", secondValIndicateur);
+            // expect(secondValIndicateur).toBe(IndicatorState.WAITING_FOR_USER_DATA);
+
+            // 2: retourner une promise via expectAsync, ou faire await expectAsync
+            return expectAsync(secondValueIndicator).toBeResolvedTo(IndicatorState.WAITING_FOR_USER_DATA);
+
+            // 3: retourner la promise, si elle part en erreur, la spec échouera
+            // return secondValueIndicator
+            //     .then(value => {
+            //         expect(value).toBe(IndicatorState.WAITING_FOR_USER_DATA);
+            //     });
         });
     })
 });
