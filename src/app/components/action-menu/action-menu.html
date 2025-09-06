@@ -1,0 +1,13 @@
+<button matIconButton [matMenuTriggerFor]="menu">
+    <mat-icon fontSet="material-symbols-rounded">menu</mat-icon>
+</button>
+<mat-menu #menu="matMenu">
+    <button mat-menu-item (click)="onAskRequest()">
+        <mat-icon fontSet="material-symbols-rounded">thumb_up</mat-icon>
+        <span>Faire du stop</span>
+    </button>
+    <button mat-menu-item>
+        <mat-icon fontSet="material-symbols-rounded">cancel</mat-icon>
+        <span>annuler</span>
+    </button>
+</mat-menu>

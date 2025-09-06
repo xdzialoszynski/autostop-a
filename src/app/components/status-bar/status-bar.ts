@@ -5,13 +5,14 @@ import { CitySelector } from '../city-selector/city-selector';
 import { GpsCoordinates } from '../gps-coordinates/gps-coordinates';
 import { Boussole } from '../boussole/boussole';
 import { IndicatorState } from '../indicator-state/indicator-state';
+import { ActionMenu } from '../action-menu/action-menu';
 
 @Component({
   selector: 'app-status-bar',
   standalone: true,
   templateUrl: './status-bar.html',
   styleUrl: './status-bar.scss',
-  imports: [Pseudo, Avatar, CitySelector, GpsCoordinates, Boussole, IndicatorState]
+  imports: [Pseudo, Avatar, CitySelector, GpsCoordinates, Boussole, IndicatorState, ActionMenu]
 })
 export class StatusBarComponent {
 
