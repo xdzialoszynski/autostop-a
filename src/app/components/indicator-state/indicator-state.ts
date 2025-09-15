@@ -25,6 +25,8 @@ export class IndicatorState implements OnInit, OnDestroy {
             return 'green';
           case enumIndicatorState.WAITING_FOR_USER_DATA:
             return 'red';
+          case enumIndicatorState.REQUEST_SENT:
+            return 'blue';
         }
       })
     );

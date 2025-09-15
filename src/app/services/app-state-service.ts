@@ -24,6 +24,7 @@ export class AppStateService {
     readonly position$: Observable<Position | null>;
     readonly indicator$: Observable<IndicatorState>;
     readonly requestSent$: Observable<boolean>;
+    readonly dpecId$: Observable<number | null>;
 
 
 
@@ -33,7 +34,8 @@ export class AppStateService {
             avatar: localStorage.getItem(this.STORAGE_KEYS.avatar),
             city: null,
             position: null,
-            requestSent: false
+            requestSent: false,
+            dpecId: null
         };
 
         this._state = new BehaviorSubject<GlobalAppState>(initialState);
@@ -56,14 +58,20 @@ export class AppStateService {
         this.requestSent$ = this._state.asObservable().pipe(
             map(state => state.requestSent)
         );
+        this.dpecId$ = this._state.asObservable().pipe(
+            map(state => state.dpecId)
+        );
+
         this.indicator$ = combineLatest(
-            [this.pseudo$, this.avatar$, this.city$, this.position$]
+            [this.pseudo$, this.avatar$, this.city$, this.position$, this.requestSent$]
         ).pipe(
-            map(([pseudo, avatar, city, position]) => {
-                if (pseudo && avatar && city && position) {
+            map(([pseudo, avatar, city, position, requestSent]) => {
+                if (pseudo && avatar && city && position && !requestSent) {
                     return IndicatorState.READY_FOR_REQUEST;
-                } else {
+                } else if ((!pseudo || !avatar || !city || !position) && !requestSent) {
                     return IndicatorState.WAITING_FOR_USER_DATA;
+                } else {
+                    return IndicatorState.REQUEST_SENT;
                 }
             })
         );
@@ -106,4 +114,7 @@ export class AppStateService {
 
     set requestSent(value: boolean) { this.updateState({ requestSent: value }); }
     get requestSent(): boolean { return this._state.getValue().requestSent; }
+
+    set dpecId(id: number | null) { this.updateState({ dpecId: id }); }
+    get dpecId(): number | null { return this._state.getValue().dpecId; }
 }

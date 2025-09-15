@@ -1,3 +1,4 @@
+<!-- todo: gérer la visibilité des actions, en fonction de l'état -->
 <button matIconButton [matMenuTriggerFor]="menu">
     <mat-icon fontSet="material-symbols-rounded">menu</mat-icon>
 </button>
@@ -6,7 +7,7 @@
         <mat-icon fontSet="material-symbols-rounded">thumb_up</mat-icon>
         <span>Faire du stop</span>
     </button>
-    <button mat-menu-item>
+    <button mat-menu-item (click)="onCancelRequest()">
         <mat-icon fontSet="material-symbols-rounded">cancel</mat-icon>
         <span>annuler</span>
     </button>

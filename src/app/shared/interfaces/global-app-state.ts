@@ -6,4 +6,5 @@ export interface GlobalAppState {
     city: GeocodingResult | null;
     position: Position | null;
     requestSent: boolean;
+    dpecId: number | null;
 }
