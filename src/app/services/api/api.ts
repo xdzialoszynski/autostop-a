@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, catchError, map, of } from 'rxjs';
+import { BehaviorSubject, catchError, map, Observable, of, tap } from 'rxjs';
 import { environment } from '../../../environements/environement';
 import { Dpec } from '../../models/dpec-interface';
 
@@ -20,15 +20,16 @@ export class Api {
     this._loading$.next(value);
   }
 
-  postDpecRequest(data: Dpec) {
+  postDpecRequest(data: Dpec): Observable<boolean> {
     this.setLoading(true);
 
     return this.httpClient.post(environment.apiUrl, data).pipe(
       map(() => true),
+      tap(() => this.setLoading(false)),
       catchError((error, caught) => {
-        console.log(error);
+        console.log(`error dans l'api : ${error}`);
         return of(false);
       })
-    )
+    );
   }
 }

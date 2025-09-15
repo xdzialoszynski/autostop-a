@@ -5,4 +5,5 @@ export interface GlobalAppState {
     avatar: Base64URLString | null;
     city: GeocodingResult | null;
     position: Position | null;
+    requestSent: boolean;
 }

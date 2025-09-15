@@ -11,12 +11,11 @@ type Base64URLString = string;
     providedIn: 'root'
 })
 export class AppStateService {
-    private readonly STORAGE_KEYS: { [K in keyof GlobalAppState]: string } = {
+    private readonly STORAGE_KEYS = {
         pseudo: 'autostop-pseudo',
         avatar: 'autostop-avatar',
-        city: 'autostop-city',
-        position: 'autostop-position'
-    };
+    } as const;
+
     private readonly _state: BehaviorSubject<GlobalAppState>;
 
     readonly pseudo$: Observable<string | null>;
@@ -24,6 +23,8 @@ export class AppStateService {
     readonly city$: Observable<GeocodingResult | null>;
     readonly position$: Observable<Position | null>;
     readonly indicator$: Observable<IndicatorState>;
+    readonly requestSent$: Observable<boolean>;
+
 
 
     constructor() {
@@ -31,8 +32,10 @@ export class AppStateService {
             pseudo: localStorage.getItem(this.STORAGE_KEYS.pseudo),
             avatar: localStorage.getItem(this.STORAGE_KEYS.avatar),
             city: null,
-            position: null
+            position: null,
+            requestSent: false
         };
+
         this._state = new BehaviorSubject<GlobalAppState>(initialState);
         this.pseudo$ = this._state.asObservable().pipe(
             map(state => state.pseudo),
@@ -50,6 +53,9 @@ export class AppStateService {
             map(state => state.position),
             distinctUntilChanged()
         );
+        this.requestSent$ = this._state.asObservable().pipe(
+            map(state => state.requestSent)
+        );
         this.indicator$ = combineLatest(
             [this.pseudo$, this.avatar$, this.city$, this.position$]
         ).pipe(
@@ -64,15 +70,20 @@ export class AppStateService {
     }
 
     private updateState(newState: Partial<GlobalAppState>) {
+        type MyKeys = typeof this.STORAGE_KEYS;
         (Object.keys(newState) as Array<keyof GlobalAppState>).forEach(key => {
-            const value = newState[key];
-            const storageKey = this.STORAGE_KEYS[key];
+            if (key in this.STORAGE_KEYS) {
 
-            if (storageKey != this.STORAGE_KEYS.city) {
-                if (value) {
-                    localStorage.setItem(storageKey, value as string);
-                } else {
-                    localStorage.removeItem(storageKey);
+                const value = newState[key];
+                const storageKey = this.STORAGE_KEYS[key as keyof MyKeys];
+
+                if (storageKey) {
+
+                    if (value) {
+                        localStorage.setItem(storageKey, value as string);
+                    } else {
+                        localStorage.removeItem(storageKey);
+                    }
                 }
             }
         });
@@ -92,4 +103,7 @@ export class AppStateService {
 
     set position(position: Position | null) { this.updateState({ position }); }
     get position(): Position | null { return this._state.getValue().position; }
+
+    set requestSent(value: boolean) { this.updateState({ requestSent: value }); }
+    get requestSent(): boolean { return this._state.getValue().requestSent; }
 }

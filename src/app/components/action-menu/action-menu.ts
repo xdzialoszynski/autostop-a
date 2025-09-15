@@ -29,7 +29,7 @@ export class ActionMenu {
       identifiantSession: 'A déterminer'//TODO: à générer à l'ouverture de l'application, et stocker dans le storage local
     }
 
-    this.dpecService.postDpecRequest(data);
+    this.dpecService.postDpecRequest(data).subscribe();
   }
 
 }
