@@ -42,7 +42,6 @@ export class ActionMenu {
   }
 
 
-  //TODO: valider la technique de création de l'objet depuis le state, puis l'utilisation et l'exploitation du service 
   onAskRequest() {
     const data: Dpec = {
       id: 0, //sera fournit par le back

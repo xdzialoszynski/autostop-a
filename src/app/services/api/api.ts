@@ -21,9 +21,10 @@ export class Api {
   }
 
   postDpecRequest(data: Dpec): Observable<Dpec> {
+    const path = '/dpecs'
     this.setLoading(true);
 
-    return this.httpClient.post<Dpec>(environment.apiUrl, data).pipe(
+    return this.httpClient.post<Dpec>(`${environment.apiUrl}${path}`, data).pipe(
       tap(() => this.setLoading(false)),
       catchError((error, caught) => {
         console.log(`error dans l'api : ${error}`);
@@ -35,9 +36,10 @@ export class Api {
   }
 
   cancelDpecRequest(id: number): Observable<boolean> {
+    const path = `/dpecs/${id}`;
     this.setLoading(true);
 
-    return this.httpClient.delete(`${environment.apiUrl}/${id}`).pipe(
+    return this.httpClient.delete(`${environment.apiUrl}${path}`).pipe(
       map(() => true),
       tap(() => this.setLoading(false)),
       catchError((error, caught) => {
