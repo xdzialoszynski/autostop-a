@@ -5,18 +5,21 @@ import { MatMenuModule } from '@angular/material/menu';
 import { Api } from '../../services/api/api';
 import { AppStateService } from '../../services/app-state-service';
 import { Dpec, DpecStatus } from '../../models/dpec-interface';
+import { IndicatorState } from '../../services/app-state.enum';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-action-menu',
-  imports: [MatButtonModule, MatMenuModule, MatIconModule],
+  imports: [MatButtonModule, MatMenuModule, MatIconModule, CommonModule],
   templateUrl: './action-menu.html',
   styleUrl: './action-menu.scss'
 })
 export class ActionMenu {
 
+  public IndicatorState = IndicatorState; // rendre l'enum accessible dans le template
 
 
-  constructor(private dpecService: Api, private state: AppStateService) { }
+  constructor(private dpecService: Api, public state: AppStateService) { }
 
 
   onCancelRequest() {
