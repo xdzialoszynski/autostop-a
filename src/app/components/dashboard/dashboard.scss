@@ -1,0 +1,46 @@
+.top-bar {
+    position: relative;
+}
+
+.map-view {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    width: 100%;
+}
+
+.main-screen {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 50px);
+    /* Adjust based on the status bar height */
+}
+
+.list-view {
+    position: absolute;
+    /* Positionnement dans le coin haut-gauche */
+    top: 20px;
+    /* Marge par rapport au haut de .map-container */
+    left: 20px;
+    /* Marge par rapport à la gauche de .map-container */
+
+    /* Garantit qu'il est au-dessus (même si z-index par défaut fonctionne souvent) */
+    z-index: 10;
+
+    width: 300px;
+    ;
+    /* Styles esthétiques */
+    background-color: white;
+    padding: 10px;
+    border: 1px solid #ccc;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.map-container {
+    flex: 1;
+    /* Take the remaining space */
+    position: relative;
+}
