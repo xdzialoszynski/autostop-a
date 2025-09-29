@@ -1,8 +1,9 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal, Signal, WritableSignal } from '@angular/core';
 import { GlobalAppState } from '../shared/interfaces/global-app-state';
 import { GeocodingResult, Position } from '../shared/interfaces/geocoding.interface';
 import { BehaviorSubject, combineLatest, distinctUntilChanged, map, Observable } from 'rxjs';
 import { IndicatorState } from '../services/app-state.enum';
+import { Ppec } from '../models/ppec-interface';
 
 
 type Base64URLString = string;
@@ -17,6 +18,7 @@ export class AppStateService {
     } as const;
 
     private readonly _state: BehaviorSubject<GlobalAppState>;
+    private _ppecs: WritableSignal<Ppec[]> = signal([]);
 
     readonly pseudo$: Observable<string | null>;
     readonly avatar$: Observable<Base64URLString | null>;
@@ -25,7 +27,6 @@ export class AppStateService {
     readonly indicator$: Observable<IndicatorState>;
     readonly requestSent$: Observable<boolean>;
     readonly dpecId$: Observable<number | null>;
-
 
 
     constructor() {
@@ -117,4 +118,7 @@ export class AppStateService {
 
     set dpecId(id: number | null) { this.updateState({ dpecId: id }); }
     get dpecId(): number | null { return this._state.getValue().dpecId; }
+
+    set ppecs(ppecs: Ppec[]) { this._ppecs.set(ppecs); }
+    get ppecs(): Signal<Ppec[]> { return this._ppecs.asReadonly() }
 }

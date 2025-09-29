@@ -18,7 +18,6 @@ import { Ppec } from '../../models/ppec-interface';
 export class ActionMenu {
 
   public IndicatorState = IndicatorState; // rendre l'enum accessible dans le template
-  private ppecs: Ppec[] | null = [];
 
   constructor(private dpecService: Api, public state: AppStateService) { }
 
@@ -68,7 +67,7 @@ export class ActionMenu {
           console.log('DPEC request sent successfully:', result);
           this.dpecService.startPollingPpecRequest(result.id).subscribe(
             (value) => {
-              this.ppecs = value ?? [];
+              this.state.ppecs = value ?? [];
             }
           ); //le polling s'arrêtera tout seul grâce au takeUntil
 
