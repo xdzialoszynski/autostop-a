@@ -7,6 +7,7 @@ import { AppStateService } from '../../services/app-state-service';
 import { Dpec, DpecStatus } from '../../models/dpec-interface';
 import { IndicatorState } from '../../services/app-state.enum';
 import { CommonModule } from '@angular/common';
+import { Ppec } from '../../models/ppec-interface';
 
 @Component({
   selector: 'app-action-menu',
@@ -17,7 +18,7 @@ import { CommonModule } from '@angular/common';
 export class ActionMenu {
 
   public IndicatorState = IndicatorState; // rendre l'enum accessible dans le template
-
+  private ppecs: Ppec[] | null = [];
 
   constructor(private dpecService: Api, public state: AppStateService) { }
 
@@ -65,6 +66,12 @@ export class ActionMenu {
           this.state.dpecId = result.id; // stocker l'id de la DPEC retournée par le back
 
           console.log('DPEC request sent successfully:', result);
+          this.dpecService.startPollingPpecRequest(result.id).subscribe(
+            (value) => {
+              this.ppecs = value ?? [];
+            }
+          ); //le polling s'arrêtera tout seul grâce au takeUntil
+
         } else {
           this.state.requestSent = false;
           this.state.dpecId = null;
@@ -77,5 +84,4 @@ export class ActionMenu {
       }
     );
   }
-
 }

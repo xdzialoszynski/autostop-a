@@ -33,5 +33,35 @@ export const mockApiRoutes = [
                 }
             }));
         }
+    },
+
+    {
+        method: 'GET',
+        path: new RegExp('autostop/ppecs'),
+        handler: (req: HttpRequest<any>) => {
+            console.log('Mock GET request received to return all PPECs');
+            return of(new HttpResponse({
+                status: 200, body: [{
+                    id: 1,
+                    positionGps: '48.8566,2.3522',
+                    horodatage: Date.now(),
+                    photo: 'base64EncodedPhotoString',
+                    pseudo: 'MockUser',
+                    destination: 'MockDestination',
+                    identifiantSession: 'MockSessionId',
+                    dpecStatus: DpecStatus.EAA
+                },
+                {
+                    id: 2,
+                    positionGps: '34.0522,-118.2437',
+                    horodatage: Date.now(),
+                    photo: 'base64EncodedPhotoString',
+                    pseudo: 'AnotherMockUser',
+                    destination: 'AnotherMockDestination',
+                    identifiantSession: 'AnotherMockSessionId',
+                    dpecStatus: DpecStatus.ANN
+                }]
+            }));
+        }
     }
 ]

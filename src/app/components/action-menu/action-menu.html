@@ -3,12 +3,12 @@
 </button>
 <mat-menu #menu="matMenu">
 
-    <button mat-menu-item (click)="onAskRequest()"
+    <button data-testid="ask-request" mat-menu-item (click)="onAskRequest()"
         [disabled]="(state.indicator$ | async) !== IndicatorState.READY_FOR_REQUEST">
         <mat-icon fontSet="material-symbols-rounded">thumb_up</mat-icon>
         <span>Faire du stop</span>
     </button>
-    <button mat-menu-item (click)="onCancelRequest()"
+    <button data-testid="cancel-request" mat-menu-item (click)="onCancelRequest()"
         [disabled]="(state.indicator$ | async) !== IndicatorState.REQUEST_SENT">
         <mat-icon fontSet="material-symbols-rounded">cancel</mat-icon>
         <span>annuler</span>
