@@ -1,1 +1,23 @@
-<p>ppecs-list works!</p>
+<ul>
+    @for (item of items(); track $index) {
+    <li class="trip-item">
+        <div class="list-item-aligned">{{item.pseudo}}
+            <mat-icon fontSet="material-symbols-rounded">chevron_right</mat-icon>
+            {{item.destination}}
+        </div>
+        <div class="list-item-aligned">
+            <mat-icon fontSet="material-symbols-rounded">directions_walk</mat-icon>
+            <mat-icon fontSet="material-symbols-rounded">chevron_right</mat-icon>
+            <mat-icon fontSet="material-symbols-rounded">airport_shuttle</mat-icon>
+        </div>
+        <div class="list-item-aligned">
+            <mat-icon fontSet="material-symbols-rounded">call_received</mat-icon>
+            {{item.horodatage|date:'shortTime'}}
+        </div>
+
+    </li>
+
+    }@empty {
+    <li>No items found.</li>
+    }
+</ul>

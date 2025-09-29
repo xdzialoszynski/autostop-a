@@ -1,0 +1,94 @@
+ul {
+    /* Supprime les puces de tous les <ul> à l'intérieur */
+    list-style-type: none;
+
+    /* Optionnel : supprime la marge et le padding par défaut */
+    margin: 0;
+    padding: 0;
+}
+
+.trip-item {
+    /* Supprime les puces de tous les <li> à l'intérieur */
+    list-style-type: none;
+
+    /* Optionnel : supprime la marge et le padding par défaut */
+    margin: 0;
+    padding: 0;
+
+    margin-bottom: 15px;
+    padding: 10px;
+    // border: 1px solid #eee;
+
+    transition: all 0.2s ease-in-out; // Animation douce pour toutes les transitions
+    border: 1px solid transparent; // Bordure invisible par défaut
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); // Ombre légère pour l'élévation
+
+    &:hover {
+        // Effet 3D (Élévation et Bordures visibles)
+
+        // 1. Bordure visible (simulée par une ombre dure)
+        box-shadow:
+            0 0 0 2px #536dfe,
+            /* 'Bordure' bleue vive */
+            0 8px 15px rgba(0, 0, 0, 0.2);
+        /* Ombre d'élévation plus prononcée */
+
+        // 2. Fond adéquat
+        background-color: #e8eaf6;
+        /* Fond bleu très pâle pour le survol */
+
+        // 3. Petite translation pour l'effet "décollé" (optionnel)
+        transform: translateY(-2px);
+    }
+
+    // État actif (cliqué ou enfoncé)
+    &:active {
+        // 1. Réduction ou suppression de l'ombre
+        box-shadow:
+            0 0 0 1px #536dfe,
+            /* Bordure très fine */
+            0 2px 5px rgba(0, 0, 0, 0.1);
+        /* Ombre très légère */
+
+        // 2. Annule l'élévation et pousse légèrement l'élément vers le bas
+        transform: translateY(1px);
+
+        // 3. Éclaircissement/assombrissement du fond pour accentuer l'effet
+        background-color: #d1d5ea;
+
+        // 4. Petite réduction de taille (optionnel)
+        // transform: scale(0.99);
+    }
+}
+
+.list-item-aligned {
+    /* 1. Active Flexbox sur le conteneur <li> */
+    display: flex;
+
+    /* 2. Centre tous les éléments (texte, icône) verticalement */
+    align-items: center;
+
+    /* 3. Optionnel : ajoute un petit espace entre les éléments */
+    gap: 5px;
+
+    /* Retirez le style de liste par défaut si nécessaire */
+    list-style-type: none;
+}
+
+.list-item-aligned mat-icon {
+    /* Ajuste la taille de l'icône pour qu'elle soit cohérente avec le texte */
+    font-size: 15px;
+    /* Vous pouvez ajuster cette valeur selon vos besoins */
+    color: inherit;
+    /* Hérite de la couleur du texte parent */
+    width: 15px;
+    height: 15px;
+    ;
+}
+
+/* 4. Ajustement spécifique pour l'icône */
+/* Assurez que l'icône ne subit pas d'étirement inattendu */
+mat-icon {
+    /* Empêche l'icône de prendre plus d'espace qu'elle n'en a besoin */
+    flex-shrink: 0;
+}
