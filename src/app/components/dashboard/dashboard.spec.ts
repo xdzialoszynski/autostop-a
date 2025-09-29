@@ -3,6 +3,8 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Dashboard } from './dashboard';
 import { of } from 'rxjs';
 import { GeocodingService } from '../../services/geocoding/geocoding-service';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 
 describe('Dashboard', () => {
   let component: Dashboard;
@@ -15,7 +17,7 @@ describe('Dashboard', () => {
 
     await TestBed.configureTestingModule({
       imports: [Dashboard],
-      providers: [{ provide: GeocodingService, useValue: geocodingServiceMock }]
+      providers: [{ provide: GeocodingService, useValue: geocodingServiceMock }, provideHttpClient(), provideHttpClientTesting()]
     })
       .compileComponents();
 

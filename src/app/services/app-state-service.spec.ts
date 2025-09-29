@@ -160,8 +160,8 @@ describe('AppStateService', () => {
 
         it('should emit READY_FOR_REQUEST on indicators$ when all data are provided', async () => {
             const firstValueIndicator = await firstValueFrom(service.indicator$);
-            // on update 2 fois le state, la valeur finale à lire pour l'indicateur est donc la troisième
-            const secondValueIndicator = firstValueFrom(service.indicator$.pipe(skip(2)));
+            // on update 3 fois le state, la valeur finale à lire pour l'indicateur est donc la quatrième
+            const secondValueIndicator = firstValueFrom(service.indicator$.pipe(skip(3)));
 
             //on log
             service.avatar$.subscribe(x => console.log(`avatar: ${x}`));
@@ -176,6 +176,7 @@ describe('AppStateService', () => {
             expect(firstValueIndicator).toBe(IndicatorState.WAITING_FOR_USER_DATA);
             service.city = { name: 'New City', address: { postcode: '12345' }, display_name: 'New City, 12345', position: { lat: 0, lng: 0 } };
             service.position = { lat: 0, lng: 0 };
+            service.requestSent = false;
 
             const secondValIndicateur = await secondValueIndicator;
             console.log("seconde valeur:", secondValIndicateur);
