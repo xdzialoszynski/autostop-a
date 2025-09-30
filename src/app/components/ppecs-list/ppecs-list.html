@@ -6,9 +6,10 @@
             {{item.destination}}
         </div>
         <div class="list-item-aligned">
-            <mat-icon fontSet="material-symbols-rounded">directions_walk</mat-icon>
-            <mat-icon fontSet="material-symbols-rounded">chevron_right</mat-icon>
             <mat-icon fontSet="material-symbols-rounded">airport_shuttle</mat-icon>
+            <mat-icon fontSet="material-symbols-rounded">chevron_right</mat-icon>
+            <mat-icon fontSet="material-symbols-rounded">directions_walk</mat-icon>
+            {{position$ | async | distance: item.positionGps}} km
         </div>
         <div class="list-item-aligned">
             <mat-icon fontSet="material-symbols-rounded">call_received</mat-icon>

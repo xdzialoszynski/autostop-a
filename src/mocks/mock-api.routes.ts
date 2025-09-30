@@ -43,7 +43,7 @@ export const mockApiRoutes = [
             return of(new HttpResponse({
                 status: 200, body: [{
                     id: 1,
-                    positionGps: '48.8566,2.3522',
+                    positionGps: '45.79642091527025, 3.09812019937941',
                     horodatage: Date.now(),
                     photo: 'base64EncodedPhotoString',
                     pseudo: 'MockUser',
@@ -53,7 +53,7 @@ export const mockApiRoutes = [
                 },
                 {
                     id: 2,
-                    positionGps: '34.0522,-118.2437',
+                    positionGps: '45.75426766798239, 4.8563532775513485',
                     horodatage: Date.now(),
                     photo: 'base64EncodedPhotoString',
                     pseudo: 'AnotherMockUser',
