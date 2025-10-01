@@ -2,7 +2,7 @@ export interface Ppec {
 
     positionGps: string;
     horodatage: number; // timestamp
-    photoBase64: string; // La photo sera envoyée encodée en Base64
+    photo: string; // La photo sera envoyée encodée en Base64
     pseudo: string;
     destination: string;
     identifiantSession: string;

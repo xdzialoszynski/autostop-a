@@ -1,3 +1,42 @@
+.list-photo {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+
+    width: 60px;
+    /* Définissez la largeur désirée pour votre image */
+    height: 60px;
+    /* Définissez la hauteur désirée */
+    overflow: hidden;
+    /* Cache toute partie de l'image qui dépasse le conteneur */
+    border-radius: 50%;
+    /* Optionnel: pour des images circulaires */
+
+    /* Autres styles pour positionner le conteneur (ex: dans Flexbox) */
+    flex-shrink: 0;
+    /* Empêche le conteneur de rétrécir dans un Flexbox */
+}
+
+.list-photo img {
+    width: 100%;
+    /* L'image prend 100% de la largeur de son conteneur */
+    height: 100%;
+    /* L'image prend 100% de la hauteur de son conteneur */
+    object-fit: cover;
+    /* Recadre l'image si ses proportions sont différentes de celles du conteneur,
+                          pour remplir entièrement le conteneur sans déformer l'image. */
+    object-position: center;
+    /* Centre l'image si elle est recadrée (par défaut) */
+}
+
+.item-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    /* Espace entre la photo et le texte */
+}
+
 ul {
     /* Supprime les puces de tous les <ul> à l'intérieur */
     list-style-type: none;
