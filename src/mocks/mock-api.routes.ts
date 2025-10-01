@@ -1,7 +1,7 @@
 import { HttpRequest, HttpResponse } from "@angular/common/http"
 import { of } from "rxjs";
 import { DpecStatus } from "../app/models/dpec-interface";
-import { REAL_PHOTO_BASE64 } from "./mock-photo";
+import { REAL_PHOTO2_BASE64, REAL_PHOTO_BASE64 } from "./mock-photo";
 
 
 export const mockApiRoutes = [
@@ -47,8 +47,8 @@ export const mockApiRoutes = [
                     positionGps: '45.79642091527025, 3.09812019937941',
                     horodatage: Date.now(),
                     photo: REAL_PHOTO_BASE64,
-                    pseudo: 'MockUser',
-                    destination: 'MockDestination',
+                    pseudo: 'Xavier',
+                    destination: 'Montpellier',
                     identifiantSession: 'MockSessionId',
                     dpecStatus: DpecStatus.EAA
                 },
@@ -56,9 +56,9 @@ export const mockApiRoutes = [
                     id: 2,
                     positionGps: '45.75426766798239, 4.8563532775513485',
                     horodatage: Date.now(),
-                    photo: 'base64EncodedPhotoString',
-                    pseudo: 'AnotherMockUser',
-                    destination: 'AnotherMockDestination',
+                    photo: REAL_PHOTO2_BASE64,
+                    pseudo: 'Sylviane',
+                    destination: 'Chambéry',
                     identifiantSession: 'AnotherMockSessionId',
                     dpecStatus: DpecStatus.ANN
                 }]
