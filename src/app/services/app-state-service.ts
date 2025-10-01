@@ -1,5 +1,5 @@
 import { Injectable, signal, Signal, WritableSignal } from '@angular/core';
-import { GlobalAppState } from '../shared/interfaces/global-app-state';
+import { GlobalAppState } from '../shared/interfaces/global-app-state.interface';
 import { GeocodingResult, Position } from '../shared/interfaces/geocoding.interface';
 import { BehaviorSubject, combineLatest, distinctUntilChanged, map, Observable } from 'rxjs';
 import { IndicatorState } from '../services/app-state.enum';
