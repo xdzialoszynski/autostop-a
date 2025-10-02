@@ -1,13 +1,13 @@
+import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
+import { Dpec, DpecStatus } from '../../models/dpec-interface';
 import { Api } from '../../services/api/api';
 import { AppStateService } from '../../services/app-state-service';
-import { Dpec, DpecStatus } from '../../models/dpec-interface';
 import { IndicatorState } from '../../services/app-state.enum';
-import { CommonModule } from '@angular/common';
-import { Ppec } from '../../models/ppec-interface';
+import { RequestMonitorService } from '../../services/monitoring/request-monitor-service';
 
 @Component({
   selector: 'app-action-menu',
@@ -19,10 +19,12 @@ export class ActionMenu {
 
   public IndicatorState = IndicatorState; // rendre l'enum accessible dans le template
 
-  constructor(private dpecService: Api, public state: AppStateService) { }
+  constructor(private dpecService: Api, public state: AppStateService, private monitor: RequestMonitorService) { }
 
 
   onCancelRequest() {
+    //todo: il faudra gérer le cas où une ppec a été acceptée, et donc modifier son statut.
+
     console.log(`onCancelRequest : dpecId = ${this.state.dpecId}`);
     if (this.state.dpecId) {
       this.dpecService.cancelDpecRequest(this.state.dpecId).subscribe(
@@ -65,7 +67,7 @@ export class ActionMenu {
           this.state.dpecId = result.id; // stocker l'id de la DPEC retournée par le back
 
           console.log('DPEC request sent successfully:', result);
-          this.dpecService.startPollingPpecRequest(result.id).subscribe(
+          this.monitor.startPollingPpecRequest(result.id).subscribe(
             (value) => {
               this.state.ppecs = value ?? [];
             }
