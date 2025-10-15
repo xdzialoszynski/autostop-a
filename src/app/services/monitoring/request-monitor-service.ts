@@ -41,7 +41,6 @@ export class RequestMonitorService implements OnDestroy {
   ngOnDestroy(): void {
     this._destroy$.next();
     this._destroy$.complete();
-    throw new Error('Method not implemented.');
   }
 
 

@@ -1,7 +1,5 @@
-import { HttpInterceptorFn, HttpResponse } from '@angular/common/http';
+import { HttpInterceptorFn } from '@angular/common/http';
 import { environment } from '../../../../environements/environement';
-import { of } from 'rxjs';
-import { Dpec, DpecStatus } from '../../../models/dpec-interface';
 import { mockApiRoutes } from '../../../../mocks/mock-api.routes';
 
 export const mockApiInterceptor: HttpInterceptorFn = (req, next) => {

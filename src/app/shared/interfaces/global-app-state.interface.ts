@@ -7,4 +7,5 @@ export interface GlobalAppState {
     position: Position | null;
     requestSent: boolean;
     dpecId: number | null;
+    selectedPpecId: number;
 }

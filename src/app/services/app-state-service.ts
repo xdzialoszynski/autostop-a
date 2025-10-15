@@ -27,6 +27,7 @@ export class AppStateService {
     readonly indicator$: Observable<IndicatorState>;
     readonly requestSent$: Observable<boolean>;
     readonly dpecId$: Observable<number | null>;
+    readonly selectedPpecId$: Observable<number>;
 
 
     constructor() {
@@ -36,7 +37,8 @@ export class AppStateService {
             city: null,
             position: null,
             requestSent: false,
-            dpecId: null
+            dpecId: null,
+            selectedPpecId: 0
         };
 
         this._state = new BehaviorSubject<GlobalAppState>(initialState);
@@ -62,6 +64,9 @@ export class AppStateService {
         this.dpecId$ = this._state.asObservable().pipe(
             map(state => state.dpecId)
         );
+        this.selectedPpecId$ = this._state.asObservable().pipe(
+            map(state => state.selectedPpecId)
+        );
 
         this.indicator$ = combineLatest(
             [this.pseudo$, this.avatar$, this.city$, this.position$, this.requestSent$]
@@ -72,6 +77,7 @@ export class AppStateService {
                 } else if ((!pseudo || !avatar || !city || !position) && !requestSent) {
                     return IndicatorState.WAITING_FOR_USER_DATA;
                 } else {
+                    // requestSent === true
                     return IndicatorState.REQUEST_SENT;
                 }
             })
@@ -119,6 +125,10 @@ export class AppStateService {
     set dpecId(id: number | null) { this.updateState({ dpecId: id }); }
     get dpecId(): number | null { return this._state.getValue().dpecId; }
 
+    set selectedPpecId(id: number) { this.updateState({ selectedPpecId: id }); }
+    get selectedPpecId(): number { return this._state.getValue().selectedPpecId; }
+
     set ppecs(ppecs: Ppec[]) { this._ppecs.set(ppecs); }
     get ppecs(): Signal<Ppec[]> { return this._ppecs.asReadonly() }
+
 }

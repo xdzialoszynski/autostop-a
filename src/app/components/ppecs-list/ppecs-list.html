@@ -1,6 +1,6 @@
 <ul>
     @for (item of items(); track $index) {
-    <li class="trip-item">
+    <li class="trip-item" (click)="selectPpec(item)">
         <div class="item-container">
             <div class="list-photo">
                 <img [src]="item.photo" alt="Photo" loading="lazy" decoding="async">
