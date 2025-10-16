@@ -8,6 +8,7 @@ import { catchError, forkJoin, map, Observable, of, switchMap, tap } from 'rxjs'
 import { DistancePipe } from '../../pipes/distance-pipe';
 import { Api } from '../../services/api/api';
 import { DpecStatus } from '../../models/dpec-interface';
+import { RequestMonitorService } from '../../services/monitoring/request-monitor-service';
 
 @Component({
   selector: 'app-ppecs-list',
@@ -19,7 +20,7 @@ export class PpecsList {
   items: Signal<Ppec[]> = signal([]);
   position$: Observable<Position | null>;
 
-  constructor(private state: AppStateService, private api: Api) {
+  constructor(private state: AppStateService, private api: Api, private monitor: RequestMonitorService) {
     this.items = this.state.ppecs;
     this.position$ = this.state.position$;
   }
@@ -28,16 +29,25 @@ export class PpecsList {
 
     //todo: 
     // 1. appeler l'api et mettre à jour dpec, ppec associées, en cas d'erreur il faudra gérer
-    // 2. mettre à jour indicator, via une de ses variables
-    // 3. déclencher le pulling sur la ppec sélectionnée, qui alimentera selectedPpec (observable)
+    // 2. mettre à jour indicator, via une de ses variables, et faire clignoter l'icone de l'indicator
+    // 3. déclencher le polling sur la ppec sélectionnée, qui alimentera selectedPpec (observable)
     // 4. modifier le template ppecs-list pour afficher un sablier, et la distance restante en couleur, en fonction de la présence d'une selectedPpec
     // 5. Prevoir une annulation de la ppec, sans que cela supprime la dpec, en recliquant dessus par exeemple
     //    La conséquence est que la dpec redevient visible pour les autres conducteurs
     //    La ppec selectionnée change de statut pour indiquer qu'elle a été annulée par le passager
     // 
-
-    this.validatatePpec(ppec.idDpec, ppec.id).subscribe();
-    //polling à prévoir
+    let validateSubscription = this.validatatePpec(ppec.idDpec, ppec.id).subscribe(
+      (result) => {
+        if (result) {
+          // alors tout est ok, on lance le polling
+          this.monitor.startPollingOnePpec(ppec.id).subscribe();
+        }
+      },
+      (error) => {
+        console.error('Erreur lors de la validation de la PPEC :', error);
+        validateSubscription.unsubscribe();
+      }
+    );
 
   }
 

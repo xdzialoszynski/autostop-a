@@ -9,7 +9,7 @@
         <span>Faire du stop</span>
     </button>
     <button data-testid="cancel-request" mat-menu-item (click)="onCancelRequest()"
-        [disabled]="(state.indicator$ | async) !== IndicatorState.REQUEST_SENT">
+        [disabled]="((state.indicator$ | async)?.valueOf()??0) < IndicatorState.REQUEST_SENT">
         <mat-icon fontSet="material-symbols-rounded">cancel</mat-icon>
         <span>annuler</span>
     </button>

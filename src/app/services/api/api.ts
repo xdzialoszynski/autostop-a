@@ -79,11 +79,22 @@ export class Api {
   }
 
   getPpecsByDpecId(IdDpec: number): Observable<Ppec[]> {
-    return this.httpClient.get<Ppec[]>(`${environment.apiUrl}/ppecs/${IdDpec}`).pipe(
+    return this.httpClient.get<Ppec[]>(`${environment.apiUrl}/ppecs/by-dpecid/${IdDpec}`).pipe(
       catchError((error) => {
         console.log(`error dans l'api : ${error}`);
         return throwError(() => {
           new Error(`Erreur lors de la récupération des PPEC associées à la DPEC avec l'id ${IdDpec}`);
+        })
+      })
+    );
+  }
+
+  getPpecById(idPpec: number): Observable<Ppec> {
+    return this.httpClient.get<Ppec>(`${environment.apiUrl}/ppecs/${idPpec}`).pipe(
+      catchError((error) => {
+        console.log(`error dans l'api : ${error}`);
+        return throwError(() => {
+          new Error(`Erreur lors de la récupération des PPEC associées à la DPEC avec l'id ${idPpec}`);
         })
       })
     );

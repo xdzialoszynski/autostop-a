@@ -8,6 +8,7 @@ import { Api } from '../../services/api/api';
 import { AppStateService } from '../../services/app-state-service';
 import { IndicatorState } from '../../services/app-state.enum';
 import { RequestMonitorService } from '../../services/monitoring/request-monitor-service';
+import { PpecStatus } from '../../models/ppec-interface';
 
 @Component({
   selector: 'app-action-menu',
@@ -43,6 +44,18 @@ export class ActionMenu {
         (error) => {
           console.error('Error cancelling DPEC request:', error);
         })
+    }
+
+    if (this.state.selectedPpecId != 0) {
+      this.dpecService.patchPPecRequest(this.state.selectedPpecId, { ppecStatus: PpecStatus.ANN }).subscribe(
+        () => {
+          console.log('Annulation de la PPEC réussie');
+          this.state.selectedPpecId = 0;
+        },
+        (error) => {
+          console.error('Erreur lors de l\'annulation de la PPEC :', error);
+        }
+      );
     }
   }
 

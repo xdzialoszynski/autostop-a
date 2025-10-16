@@ -69,15 +69,18 @@ export class AppStateService {
         );
 
         this.indicator$ = combineLatest(
-            [this.pseudo$, this.avatar$, this.city$, this.position$, this.requestSent$]
+            [this.pseudo$, this.avatar$, this.city$, this.position$, this.requestSent$, this.selectedPpecId$]
         ).pipe(
-            map(([pseudo, avatar, city, position, requestSent]) => {
+            map(([pseudo, avatar, city, position, requestSent, selectedPpecId]) => {
                 if (pseudo && avatar && city && position && !requestSent) {
                     return IndicatorState.READY_FOR_REQUEST;
                 } else if ((!pseudo || !avatar || !city || !position) && !requestSent) {
                     return IndicatorState.WAITING_FOR_USER_DATA;
                 } else {
-                    // requestSent === true
+                    if (selectedPpecId != 0) { // une ppec a été sélectionnée
+                        return IndicatorState.PPEC_SELECTED;
+                    }
+                    // le cas par défaut, la demande de dpec a été envoyée, on attend les ppec, puis la sélection d'une ppec
                     return IndicatorState.REQUEST_SENT;
                 }
             })

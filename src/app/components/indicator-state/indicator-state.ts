@@ -27,6 +27,10 @@ export class IndicatorState implements OnInit, OnDestroy {
             return 'red';
           case enumIndicatorState.REQUEST_SENT:
             return 'blue';
+          case enumIndicatorState.PPEC_SELECTED:
+            return 'orange';
+          default:
+            return 'grey'; // Couleur par défaut si l'état n'est pas reconnu
         }
       })
     );
